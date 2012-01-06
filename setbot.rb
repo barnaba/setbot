@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'cinch'
 require 'ruby-debug'
+require 'nokogiri'
+require 'open-uri'
 require File.dirname(__FILE__) + '/legoset'
 
 
@@ -28,12 +30,38 @@ bot = Cinch::Bot.new do
       "http://www.bricklink.com/catalogList.asp?catType=&catID=&itemYear=&searchNo=Y&q=#{set.number}&catLike=W"
     end
 
+    def bli_formatter(set)
+      url = "http://www.bricklink.com/catalogItem.asp?O=#{set.number}"
+      doc = Nokogiri::HTML(open(url))
+      if doc.at(%Q^[@src="http://img.bricklink.com/images/noImage.gif"]^).nil?
+       "http://www.bricklink.com/catalogItemPic.asp?O=#{set.number}"
+      else
+       "http://www.bricklink.com/catalogItemPic.asp?S=#{set.number}"
+      end
+    end
+
     def n_formatter(set)
       "#{set.number}"
     end
 
     def bs_formatter(set)
-      "http://brickset.com/detail/?Set=#{set.number}"
+      url = "http://brickset.com/detail/?Set=#{set.number}"
+      doc = Nokogiri::HTML(open(url))
+      if doc.css('#setImage').empty?
+        "--"
+      else
+        url
+      end
+    end
+
+    def bsi_formatter(set)
+      url = "http://brickset.com/detail/?Set=#{set.number}"
+      doc = Nokogiri::HTML(open(url))
+      if doc.css('#setImage').empty?
+        "--"
+      else
+        doc.at('#setImage/@src').to_s
+      end
     end
   end
 
@@ -43,10 +71,6 @@ bot = Cinch::Bot.new do
     formatter ||= "to_s"
     formatter += "_formatter"
     formatter_sym = formatter.to_sym
-
-    puts "GOT QUERY LOL"
-    puts "set number #{set_number}"
-    puts "formater #{formatter}"
 
     unless respond_to? formatter_sym
       formatter_sym = :to_s_formatter
@@ -73,6 +97,11 @@ bot = Cinch::Bot.new do
 
   on :message, /!help|!pomoc|!setbot/ do |m|
     m.reply "Informacje o setbocie: http://github.com/barnaba/setbot"
+  end
+
+  on :message, /!baza/ do |m|
+    data = File.open("dbversion", "r").read.chomp
+    m.reply "Baza ostatnio uaktualniana #{data}. Baza zawiera #{LEGOSet.count} rekordow."
   end
 
   on :message, /^\d+$/ do |m|

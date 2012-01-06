@@ -42,9 +42,19 @@ Zwraca nazwę zestawu wraz z nazwą kategorii z której pochodzi zestaw.
 
 Zwraca link do zestawu na portalu [bricklink](http://www.bricklink.com).
 
+#### Formater `bli`
+
+Zwraca link do zdjęcia zestawu na portalu [bricklink](http://www.bricklink.com).
+Formater preferuje link do zdjęcia pudełka jeśli jest dostępne.
+
 #### Formater `bs`
 
 Zwraca link do zestawu na portalu [brickset](http://brickset.com).
+
+#### Formater `bs`
+
+Zwraca link do zdjęcia zestawu na portalu [brickset](http://brickset.com).
+Jeżeli nie ma obrazka, zwraca `--`
 
 #### formater `n`
 
