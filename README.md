@@ -5,6 +5,10 @@
 Setbot rozpoznaje ciągi znaków zaczynające się `@` jako oznaczenie poszukiwanego numeru zestawu.
 Przykładowe zapytania o zestawy to `@1234`, `@1234-1`.
 
+Setbot odpowiada na polecenie `ping`.
+
+Bawić się setbotem można zarówno na kanale jak i na prvie, do czego gorąco zachęcam.
+
 ## Opcje zaawansowane
 
 ### Rodzaj odpowiedzi
