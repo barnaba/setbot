@@ -60,6 +60,11 @@ Jeżeli nie ma obrazka, zwraca `--`
 
 Zwraca sam numer zestawu.
 
+### Info
+
+Link do tego repozytorium można uzyskać wpisując `!help`, `!pomoc` lub `!setbot`.
+Informacje o stanie bazy danych wyswietla polecenie `!baza`.
+
 ## Dotacje
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Barnaba&url=http://github.com/barnaba/setbot&title=Setbot&language=&tags=github&category=software) 
