@@ -59,3 +59,7 @@ Jeżeli nie ma obrazka, zwraca `--`
 #### formater `n`
 
 Zwraca sam numer zestawu.
+
+## Dotacje
+
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Barnaba&url=http://github.com/barnaba/setbot&title=Setbot&language=&tags=github&category=software) 
