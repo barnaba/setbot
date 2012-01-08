@@ -3,91 +3,47 @@ require 'cinch'
 require 'ruby-debug'
 require 'nokogiri'
 require 'open-uri'
+require 'ruby-bitly'
+require 'yaml'
+
 require File.dirname(__FILE__) + '/legoset'
 
-
 bot = Cinch::Bot.new do
+
   configure do |c|
     c.server = "irc.quakenet.org"
     c.nick = "__setbot__"
-    c.channels = ["#lugpol"]
+    c.channels = ["#lugpoll"]
   end
+
+
+  @setinfo = lambda do |m, set_number|
+    sets = getset(set_number)
+    reply = sets.map do |set|
+      "#{set.number}: #{set.name}"
+    end
+    pad = reply.max { |a,b| a.length <=> b.length }
+    reply.each_with_index do |r, index|
+      m.reply r.ljust(pad.length+1) + bl_formatter(sets[index])
+    end
+  end
+
 
   helpers do
     def getset(query)
       return (LEGOSet.all(:number => query) + LEGOSet.all(:number.like => query + '-%'))
     end
 
-    def to_s_formatter(set)
-      "#{set.name}"
-    end
-
-    def long_formatter(set)
-      "#{set.category} >> #{set.name}"
-    end
-
     def bl_formatter(set)
-      "http://www.bricklink.com/catalogList.asp?catType=&catID=&itemYear=&searchNo=Y&q=#{set.number}&catLike=W"
+      puts @settings.inspect
+      @settings ||= YAML::load_file File.dirname(__FILE__) + "/settings.yml" 
+      url =  "http://www.bricklink.com/catalogList.asp?catType=&catID=&itemYear=&searchNo=Y&q=#{set.number}&catLike=W"
+      Bitly.shorten(url, @settings['bitly']['user'], @settings['bitly']['key']).url
     end
 
-    def bli_formatter(set)
-      url = "http://www.bricklink.com/catalogItem.asp?O=#{set.number}"
-      doc = Nokogiri::HTML(open(url))
-      if doc.at(%Q^[@src="http://img.bricklink.com/images/noImage.gif"]^).nil?
-       "http://www.bricklink.com/catalogItemPic.asp?O=#{set.number}"
-      else
-       "http://www.bricklink.com/catalogItemPic.asp?S=#{set.number}"
-      end
-    end
 
-    def n_formatter(set)
-      "#{set.number}"
-    end
-
-    def bs_formatter(set)
-      url = "http://brickset.com/detail/?Set=#{set.number}"
-      doc = Nokogiri::HTML(open(url))
-      if doc.css('#setImage').empty?
-        "--"
-      else
-        url
-      end
-    end
-
-    def bsi_formatter(set)
-      url = "http://brickset.com/detail/?Set=#{set.number}"
-      doc = Nokogiri::HTML(open(url))
-      if doc.css('#setImage').empty?
-        "--"
-      else
-        doc.at('#setImage/@src').to_s
-      end
-    end
-  end
-
-  on :message, /@(\d{2,}(?:-\d+)?)([=+])?(\w+)?/ do |m, set_number, operator, formatter|
-    sets = getset(set_number)
-    operator ||= "="
-    formatter ||= "to_s"
-    formatter += "_formatter"
-    formatter_sym = formatter.to_sym
-
-    unless respond_to? formatter_sym
-      formatter_sym = :to_s_formatter
-    end
-
-    if (operator == "=")
-      sets.each do |s|
-        result = send(formatter_sym, s)
-        m.reply "#{s.number}\t\t#{result}"
-      end
-    elsif (operator == "+")
-      results = sets.reduce([]) do |result, s|
-        result << send(formatter_sym, s)
-      end
-      m.reply results.join(', ')
-    end
-  end
+  on :message, /(?:[@%&#!]|zestaw\s*)(\d{2,}(?:-\d+)?)/, &@setinfo
+  on :message, /^(\d+(?:-\d+)?)\??$/, &@setinfo
 
   on :message, /^ping$/ do |m, query|
     unless m.channel?
@@ -104,9 +60,19 @@ bot = Cinch::Bot.new do
     m.reply "Baza ostatnio uaktualniana #{data}. Baza zawiera #{LEGOSet.count} rekordow."
   end
 
-  on :message, /^\d+$/ do |m|
-    m.reply "Ta opcja nie jest juz wspierana. Informacje o setbocie: http://github.com/barnaba/setbot"
+
+  on :join do |m|
+    nick = m.user.nick
+    if nick != "" and User.count(:nick => nick) == 0
+
+      user = User.new
+      user.nick = nick
+      user.save!
+
+      m.reply "#{nick}: YO MAN OBCZAJ NOWEGO SETBOTA YEAH http://github.com/barnaba/setbot"
+    end
   end
+
 end
 
 bot.start

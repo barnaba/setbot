@@ -12,6 +12,11 @@ class LEGOSet
   property :name, String
 end
 
+class User
+  include DataMapper::Resource
+  property :nick, String, :key => true
+end
+
 DataMapper.finalize
 DataMapper.auto_upgrade!
 

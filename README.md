@@ -1,74 +1,51 @@
 # Setbot
 
+## Przykłady
+
+    <barnex> 2222
+    <__setbot__> 2222-1: Tunnel Fun http://j.mp/AddYoG
+
+    <barnex> 2222?
+    <__setbot__> 2222-1: Tunnel Fun http://j.mp/AddYoG
+
+    <barnex> kupiłem na allegro @2222
+    <__setbot__> 2222-1: Tunnel Fun http://j.mp/AddYoG
+
+    <barnex> kupiłem na allegro zestaw 2222
+    <__setbot__> 2222-1: Tunnel Fun http://j.mp/AddYoG
+
 ## Podstawowe działanie
 
-Setbot rozpoznaje ciągi znaków zaczynające się `@` jako oznaczenie poszukiwanego numeru zestawu.
-Przykładowe zapytania o zestawy to `@1234`, `@1234-1`.
+Setbot rozpoznaje ciągi znaków zaczynające się od `!`, `@`, `#` lub słowa `zestaw` jako oznaczenie poszukiwanego numeru zestawu.
 
-Setbot odpowiada na polecenie `ping`.
+Jeżeli w linii znajduje się tylko numer zestawu, to też zostanie rozpoznany.
+
+Można pytać o zestaw szczegółowo (podając numer zestawu po myślniku) lub nie. W tym drugim przypadku zostaną zwrócone wszystkie pasujące zestawy.
+
+Skrócony link na końcu prowadzi do strony zestawu na bricklinku.
 
 Bawić się setbotem można zarówno na kanale jak i na prvie, do czego gorąco zachęcam.
 
-## Opcje zaawansowane
+Setbot odpowiada na polecenie `ping`, ale tylko na privie.
 
-### Rodzaj odpowiedzi
-
-Po numerze zestawu można podać jeden z operatorów `+` bądź `=`.
-
-Użycie operatora `+` będzie skutkowało połączeniem sformatowanych odpowiedzi (i oddzieleniem ich przecinkami).
-
-        +barnex> @1234+
-        +__setbot__> Gear Wheel Assortment, Letter Bricks, Replacement Gearbox for Electric, Motor 4.5V/12V Type II 12 x 4 x 3 1/3
-
-Użycie operatora `=` będzie skutkowało wypisaniem każdej sformatowanej odpowiedzi w nowej linii wraz z odpowiadającym jej numerem zestawu.
-
-        +barnex> @1234
-        +__setbot__> 1234-1  Gear Wheel Assortment
-        +__setbot__> 1234-2  Letter Bricks
-        +__setbot__> 1234-3  Replacement Gearbox for Electric, Motor 4.5V/12V Type II 12 x 4 x 3 1/3
-
-### Formatery
-
-Setbot udostępnia różne sposoby formatowania odpowiedzi.
-Sposób formatowania należy podać po operatorze rodzaju odpowiedzi.
-
-Przykładowe zapytania zmieniające sposób formatowania to `@1234+n`, `@1234=bs`.
-
-#### Formater `to_s`
-
-Używany domyślnie, podaje nazwę zestawu,
-
-#### Formater `long`
-
-Zwraca nazwę zestawu wraz z nazwą kategorii z której pochodzi zestaw.
-
-#### Formater `bl`
-
-Zwraca link do zestawu na portalu [bricklink](http://www.bricklink.com).
-
-#### Formater `bli`
-
-Zwraca link do zdjęcia zestawu na portalu [bricklink](http://www.bricklink.com).
-Formater preferuje link do zdjęcia pudełka jeśli jest dostępne.
-
-#### Formater `bs`
-
-Zwraca link do zestawu na portalu [brickset](http://brickset.com).
-
-#### Formater `bs`
-
-Zwraca link do zdjęcia zestawu na portalu [brickset](http://brickset.com).
-Jeżeli nie ma obrazka, zwraca `--`
-
-#### formater `n`
-
-Zwraca sam numer zestawu.
 
 ### Info
 
 Link do tego repozytorium można uzyskać wpisując `!help`, `!pomoc` lub `!setbot`.
+
 Informacje o stanie bazy danych wyswietla polecenie `!baza`.
 
 ## Dotacje
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Barnaba&url=http://github.com/barnaba/setbot&title=Setbot&language=&tags=github&category=software) 
+
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+<input type="image" src="https://www.paypalobjects.com/pl_PL/PL/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal — Płać wygodnie i bezpiecznie">
+<img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+
