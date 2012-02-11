@@ -1,8 +1,9 @@
 # encoding: UTF-8
 #
+require 'raspell'
+
 require 'rubygems'
 require 'cinch'
-require 'ruby-debug'
 require 'nokogiri'
 require 'open-uri'
 require 'ruby-bitly'
@@ -37,13 +38,13 @@ bot = Cinch::Bot.new do
   end
 
 
+
   helpers do
     def getset(query)
       return (LEGOSet.all(:number => query) + LEGOSet.all(:number.like => query + '-%'))
     end
 
     def bl_formatter(set)
-      puts @settings.inspect
       @settings ||= YAML::load_file File.dirname(__FILE__) + "/settings.yml" 
       url =  "http://www.bricklink.com/catalogList.asp?catType=&catID=&itemYear=&searchNo=Y&q=#{set.number}&catLike=W"
       Bitly.shorten(url, @settings['bitly']['user'], @settings['bitly']['key']).url
@@ -83,9 +84,20 @@ bot = Cinch::Bot.new do
   end
 
 
-  on :message, /!ogonki (.+)/ do |m, ogonki|
+  on :message, /^!ogonki (.+)/ do |m, ogonki|
     reply = ogonki.gsub /([żółćęśąźńŻÓŁĆĘŚĄŹŃ])/, "\00303\\1\003"
     m.reply "Znalazłem następujące ogonki: #{reply}"
+  end
+
+  on :message, /^!spell (.+)/ do |m, line|
+      @speller ||= Aspell.new("pl_PL")
+      @speller.suggestion_mode = Aspell::NORMAL
+      words = line.split(" ")
+      words = words.map do |word|
+        @speller.check(word) ? word : "\00304#{word}\003"
+      end
+      m.reply words.join(" ")
+
   end
 
   on :message, /zażółć gęślą jaźń/ do |m|
