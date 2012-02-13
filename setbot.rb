@@ -1,13 +1,12 @@
 # encoding: UTF-8
 #
-require 'raspell'
 
 require 'rubygems'
-require 'cinch'
-require 'nokogiri'
-require 'open-uri'
-require 'ruby-bitly'
+require 'bundler/setup'
 require 'yaml'
+require 'open-uri'
+
+Bundler.require
 
 require File.dirname(__FILE__) + '/legoset'
 

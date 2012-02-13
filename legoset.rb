@@ -1,7 +1,3 @@
-require 'rubygems'
-require 'data_mapper'
-require 'dm-migrations'
-
 #DataMapper.setup(:default, 'sqlite://File.dirname(__FILE__)/sets.sqlite')
 DataMapper.setup(:default, 'sqlite:///home/barnex/kod/setbot/sets.sqlite')
 class LEGOSet
