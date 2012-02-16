@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'yaml'
-require 'open-uri'
 
 Bundler.require
 

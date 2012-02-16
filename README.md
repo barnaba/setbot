@@ -58,3 +58,16 @@ Poprawnie zakodowane znaki zostaną podświetlone na zielono.
 </form>
 
 
+# instalacja
+
+    bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
+    source ~/.bash_profile
+    rvm install 1.9.2
+    rvm use 1.9.2
+    rvm gemset create setbot
+    rvm use 1.9.2@setbot
+    gem install bundler
+    bundle install
+    cp settings.yml.default settings.yml
+    vi settings.yml #dodaj dane swojego konta bitly
+    ./run.sh

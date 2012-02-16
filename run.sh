@@ -1,4 +1,5 @@
 #!/bin/bash
+BASEDIR=$(dirname $0)
 if [[ -s "$HOME/.rvm/scripts/rvm" ]] ; then
   source "$HOME/.rvm/scripts/rvm"
 elif [[ -s "/usr/local/rvm/scripts/rvm" ]] ; then
@@ -7,5 +8,5 @@ else
   printf "ERROR: An RVM installation was not found.\n"
 fi
 rvm use 1.9.2@setbot
-cd /home/barnex/kod/setbot
+cd $BASEDIR
 ruby setbot.rb
